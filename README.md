@@ -53,4 +53,4 @@ Abajo, se adjuntan los pasos a seguir para ejecutar el código exitosamente desd
    ```
 # Conclusiones
 Finalmente, al conocer dichos conceptos y correr el programa para postumamente observar el comportamiento, efectividad y el nivel de optimidad que tiene cada algoritmo de ordenamiento para exitosamente ordenar datos u arreglos desordenados podemos concluir que los algoritmos que mejor cumplen dichas características en orden de mejor a peor se despliegan de tal forma:
-! [grafica_ordenamientos](grafica_ordenamientos.png)
+![grafica_ordenamientos](grafica_ordenamientos.png)
