@@ -53,4 +53,12 @@ Abajo, se adjuntan los pasos a seguir para ejecutar el código exitosamente desd
    ```
 # Conclusiones
 Finalmente, al conocer dichos conceptos y correr el programa para postumamente observar el comportamiento, efectividad y el nivel de optimidad que tiene cada algoritmo de ordenamiento para exitosamente ordenar datos u arreglos desordenados podemos concluir que los algoritmos que mejor cumplen dichas características en orden de mejor a peor se despliegan de tal forma:
+1. Shellsort
+2. Mergesort
+3. Heapsort
+4. Insertionsort
+5. Bubblesort
+6. Selectionsort
+7. Quicksort
+   Teóricamente, este orden debería estar invertido—o por lo menos, el primer y último lugar—, es decir, quicksort debería ser el algoritmo de ordenamiento más eficiente de los siete y el shellsort debería ser el menos eficiente. Sin embargo, por razones como lo es el sistema operativo de MacOS, los resultados se tornaron a dar algo completamente opuesto.
 ![grafica_ordenamientos](grafica_ordenamientos.png)
