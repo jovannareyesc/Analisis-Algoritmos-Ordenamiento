@@ -13,23 +13,21 @@
 using namespace std::chrono;
 using namespace std;
 
-void orden_por_insercion(int arreglo[], int longitud);
-void orden_por_burbuja(int arreglo[], int longitud);
-void orden_por_seleccion(int s[], int n);
-void merge(int *array, int l, int m, int r);
-void orden_por_mezcla(int *array, int l, int r);
-void swap(int* a, int* b);
-int partition (int arr[], int  low, int high);
-void orden_rapido(int arr[], int low, int high);
-void heapify(int arr[], int n, int i);
-void orden_por_monticulos(int arr[], int n);
-void orden_shell(int s[], int n);
 void pasar_arreglo(int arreglo[], int arreglo_desordenado[], int longitud);
-
+void insertion_sort(int arr[], int n);   
+void bubble_sort(int arr[], int n);     
+void selection_sort(int arr[], int n);   
+void merge_sort(int arr[], int n);       
+void quick_sort(int arr[], int n);       
+void heap_sort(int arr[], int n);        
+void shell_sort(int arr[], int n);       
+void merge(int arr[], int left, int mid, int right);
+void mergeSort(int arr[], int left, int right);
 void swap(int* a, int* b);
 int Partition(int arr[], int inicio, int fin);
-void quicksort_h(int arr[], int inicio, int fin);
-void quick_sort(int arr[], int n);
+void QuickSortHelper(int arr[], int inicio, int fin);
+void heapify(int arr[], int length, int i);
+
 
 //matrices
 double datos_insercion[NUM_PRUEBAS+1][(MAX_TAMANO/INCREMENTO)+1];
@@ -43,8 +41,9 @@ double datos_shell[NUM_PRUEBAS+1][(MAX_TAMANO/INCREMENTO)+1];
 
 
 int main() {
-
+//semilla
     srand(time(NULL));
+
     const int longitud_arr = MAX_TAMANO;
     int longitud = MIN_TAMANO;
     int repeticiones = NUM_PRUEBAS;
@@ -70,19 +69,20 @@ int main() {
             //INSERCION
             pasar_arreglo(arreglo, arreglo_desordenado, longitud);
             auto insercion_start = high_resolution_clock::now();
-            orden_por_insercion(arreglo, longitud);
+            insertion_sort(arreglo, longitud);
             auto insercion_end = high_resolution_clock::now();
             duration<double> insercion_duration = insercion_end - insercion_start;
             double insercion_run_time = insercion_duration.count() * 1000;
             datos_insercion[i][cont_columnas] = insercion_run_time;
             insercion_tiempo += insercion_run_time;
             //  cout << fixed << setprecision(6) << run_time << " milisegundos." << endl;
+            //  cout << fixed << setprecision(6) << run_time << " milisegundos." << endl;
             // outFile << fixed << setprecision(6) << run_time << " milisegundos." << endl;
 
             //BURBUJA
             pasar_arreglo(arreglo, arreglo_desordenado, longitud);
             auto burbuja_start = high_resolution_clock::now();
-            orden_por_insercion(arreglo, longitud);
+            bubble_sort(arreglo, longitud);
             auto burbuja_end = high_resolution_clock::now();
             duration<double> burbuja_duration = burbuja_end - burbuja_start;
             double burbuja_run_time = burbuja_duration.count() * 1000;
@@ -92,7 +92,7 @@ int main() {
             //SELECCIÓN
             pasar_arreglo(arreglo, arreglo_desordenado, longitud);
             auto seleccion_start = high_resolution_clock::now();
-            orden_por_seleccion(arreglo, longitud);
+            selection_sort(arreglo, longitud);
             auto seleccion_end = high_resolution_clock::now();
             duration<double> seleccion_duration = seleccion_end - seleccion_start;
             double seleccion_run_time = seleccion_duration.count() * 1000;
@@ -102,7 +102,7 @@ int main() {
             //MEZCLA
             pasar_arreglo(arreglo, arreglo_desordenado, longitud);
             auto mezcla_start = high_resolution_clock::now();
-            orden_por_seleccion(arreglo, longitud);
+            merge_sort(arreglo, longitud);
             auto mezcla_end = high_resolution_clock::now();
             duration<double> mezcla_duration = mezcla_end - mezcla_start;
             double mezcla_run_time = mezcla_duration.count() * 1000;
@@ -123,7 +123,7 @@ int main() {
             //HEAPSORT
             pasar_arreglo(arreglo, arreglo_desordenado, longitud);
             auto heap_start = high_resolution_clock::now();
-            orden_por_monticulos(arreglo, longitud);
+            heap_sort(arreglo, longitud);
             auto heap_end = high_resolution_clock::now();
             duration<double> heap_duration = heap_end - heap_start;
             double heap_run_time = heap_duration.count() * 1000;
@@ -133,7 +133,7 @@ int main() {
             //SHELLSORT
             pasar_arreglo(arreglo, arreglo_desordenado, longitud);
             auto shell_start = high_resolution_clock::now();
-            orden_shell(arreglo, longitud);
+            shell_sort(arreglo, longitud);
             auto shell_end = high_resolution_clock::now();
             duration<double> shell_duration = shell_end - shell_start;
             double shell_run_time = shell_duration.count() * 1000;
@@ -362,205 +362,59 @@ int main() {
 
 
 
+//////////////////FUNCIÓN PARA PASAR ARREGLO/////////////
+void pasar_arreglo(int arreglo[], int arreglo_desordenado[], int longitud) {
+    for (int i = 0; i < longitud; i++) {
+         arreglo_desordenado[i] = arreglo[i];
+    }
+}
+////////////////////////////////////////////////////////////
 
 
-////////////////ORDEN POR INSERCIÓN///////////////////////////
-void orden_por_insercion(int arreglo[], int longitud) {
-    for (int i = 1; i < longitud; i++) {
-        int aux = arreglo[i];
+/////////////////ORDEN POR INSERCIÓN////////////////////////
+void insertion_sort(int arr[], int n) {
+    for (int i = 1; i < n; i++) {
+        int temp = arr[i];
         int j = i - 1;
-        while (j >= 0 && aux < arreglo[j]) {
-            arreglo[j + 1] = arreglo[j];
+        while (j >= 0 && temp < arr[j]) {
+           arr[j + 1] = arr[j];
             j = j - 1;
         }
-        arreglo[j + 1] = aux;
+        arr[j + 1] = temp;
     }
 }
-///////////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////////
 
 
-
-
-///////////ORDEN POR BURBUJA OPTIMIZADO//////////////////////
-void orden_por_burbuja(int arreglo[], int longitud) {
-    int temp;
-    bool aux = true;
-    while (aux) {
-        aux = false;
-        for (int j = 0 ; j < longitud-1 ; j++) {
-            if (arreglo[j] > arreglo[j+1]) {
-                temp = arreglo[j];
-                arreglo[j] = arreglo[j+1];
-                arreglo[j+1] = temp;
-                aux = true;
-
+////////////////////ORDEN BURBUJA///////////////////////////
+void bubble_sort(int arr[], int n) {
+    for (int i = 0; i < n - 1; i++) {
+        for (int j = 0; j < n - i - 1; j++) {
+            if (arr[j] > arr[j + 1]) {
+                int temp = arr[j];
+                arr[j] = arr[j + 1];
+                arr[j + 1] = temp;
             }
         }
     }
-
-    cout << endl;
 }
 ////////////////////////////////////////////////////////////
 
 
 
-
-///////////////ORDEN POR SELECCIÓN/////////////////////////
-void orden_por_seleccion(int arreglo[], int longitud) {
-
-    int i_min, temp;
-    for (int i = 0; i < longitud - 1; ++i)
-    {
-        i_min = i;
-        for (int j = i + 1; j < longitud; ++j)
-        {
-            if (arreglo[j] < arreglo[i_min])
-            {
-                i_min = j;
+////////////////////ORDEN POR SELECCIÓN////////////////////
+void selection_sort(int arr[], int n) {
+    for (int i = 0; i < n - 1; i++) {
+        int min_idx = i;
+        for (int j = i + 1; j < n; j++) {
+            if (arr[j] < arr[min_idx]) {
+                min_idx = j;
             }
         }
-        if (i_min != i)
-        {
-            temp = arreglo[i];
-            arreglo[i] = arreglo[i_min];
-            arreglo[i_min] = temp;
-        }
-    }
-}
-///////////////////////////////////////////////////////////
-
-
-
-
-//////////////////ORDEN POR MEZCLA////////////////////////
-void merge(int *arreglo, int l, int m, int r) {
-    int i, j, k, nl, nr;
-    nl = m-l+1; nr = r-m;
-    int larr[nl], rarr[nr];
-
-    for(i = 0; i<nl; i++)
-        larr[i] = arreglo[l+i];
-
-    for(j = 0; j<nr; j++)
-        rarr[j] = arreglo[m+1+j];
-
-    i = 0; j = 0; k = l;
-
-    while(i < nl && j<nr) {
-        if(larr[i] <= rarr[j]) {
-            arreglo[k] = larr[i];
-            i++;
-        } else {
-            arreglo[k] = rarr[j];
-            j++;
-        }
-        k++;
-    }
-    while(i<nl) {
-        arreglo[k] = larr[i];
-        i++; k++;
-    }
-    while(j<nr) {
-        arreglo[k] = rarr[j];
-        j++; k++;
-    }
-}
-void ordenamiento_por_mezcla(int *arreglo, int l, int r) {
-    int m;
-    if(l < r) {
-        int m = l+(r-l)/2;
-
-        ordenamiento_por_mezcla(arreglo, l, m);
-        ordenamiento_por_mezcla(arreglo, m+1, r);
-        merge(arreglo, l, m, r);
-    }
-}
-
-///////////////////////////////////////////////////////////
-
-
-
-//////////////ORDEN POR ORDENAMIENTO RÁPIDO//////////////
-void swap(int* a, int* b) {
-    int temp = *a;
-    *a = *b;
-    *b = temp;
-}
-int Partition(int arreglo[], int start, int end) {
-    int pivot = arreglo[end];
-    int i = start - 1;
-    for (int j = start; j <= end - 1; j++) {
-        if (arreglo[j] <= pivot) {
-            i++;
-            swap(&arreglo[i], &arreglo[j]);
-        }
-    }
-    swap(&arreglo[i + 1], &arreglo[end]);
-    return i + 1;
-}
-void quicksort_h(int arreglo[], int start, int end) {
-    if (start < end) {
-        int p_index = Partition(arreglo, start, end);
-        quicksort_h(arreglo, start, p_index - 1);
-        quicksort_h(arreglo, p_index + 1, end);
-    }
-}
-void quick_sort(int arreglo[], int longitud) {
-    quicksort_h(arreglo, 0, longitud - 1);
-}
-////////////////////////////////////////////////////////////
-
-
-
-////////////////ORDEN POR MONTÍCULO////////////////////////
-void heapify(int arreglo[], int longitud, int i) {
-    int largest = i;
-    int left = 2 * i + 1;
-    int right = 2 * i + 2;
-
-    if (left < longitud && arreglo[left] > arreglo[largest])
-        largest = left;
-
-    if (right < longitud && arreglo[right] > arreglo[largest])
-        largest = right;
-
-    if (largest != i) {
-        swap(arreglo[i], arreglo[largest]);
-        heapify(arreglo, longitud, largest);
-    }
-}
-
-void orden_por_monticulos(int arreglo[], int longitud) {
-    for (int i = longitud / 2 - 1; i >= 0; i--)
-        heapify(arreglo, longitud, i);
-
-    for (int i = longitud- 1; i >= 0; i--) {
-        swap(arreglo[0], arreglo[i]);
-        heapify(arreglo, i, 0);
-    }
-}
-/////////////////////////////////////////////////////////
-
-
-
-/////////////////ORDEN POR MEZCLA////////////////////////
-void orden_shell(int arreglo[], int longitud)
-{
-    int gap[4] = { longitud/2, longitud/4, longitud/8, 1};
-    int temp, k;
-
-    for (int i = 0; i < 4; ++i)
-    {
-        for (int j = gap[i]; j < longitud; ++j)
-        {
-            temp = arreglo[j];
-            k = j;
-            while (k >= gap[i] && arreglo[k - gap[i]] > temp)
-            {
-                arreglo[k] = arreglo[k - gap[i]];
-                k = k - gap[i];
-            }
-            arreglo[k] = temp;
+        if (min_idx != i) {
+            int temp = arr[i];
+            arr[i] = arr[min_idx];
+            arr[min_idx] = temp;
         }
     }
 }
@@ -568,11 +422,132 @@ void orden_shell(int arreglo[], int longitud)
 
 
 
+////////////////////ORDEN POR MEZCLA//////////////////////
+void merge(int arr[], int left, int mid, int right) {
+    int n1 = mid - left + 1;
+    int n2 = right - mid;
+    int L[n1], R[n2];
+    for (int i = 0; i < n1; i++)
+        L[i] = arr[left + i];
+    for (int j = 0; j < n2; j++)
+        R[j] = arr[mid + 1 + j];
+    int i = 0, j = 0, k = left;
+    while (i < n1 && j < n2) {
+        if (L[i] <= R[j]) {
+            arr[k] = L[i];
+            i++;
+        } else {
+            arr[k] = R[j];
+            j++;
+        }
+        k++;
+    }
+    while (i < n1) {
+        arr[k] = L[i];
+        i++;
+        k++;
+    }
+    while (j < n2) {
+        arr[k] = R[j];
+        j++;
+        k++;
+    }
+}
 
-//////////////////FUNCIÓN PARA PASAR ARREGLO/////////////
-void pasar_arreglo(int arreglo[], int arreglo_desordenado[], int longitud) {
-    for (int i = 0; i < longitud; i++) {
-         arreglo_desordenado[i] = arreglo[i];
+void mergeSort(int arr[], int left, int right) {
+    if (left < right) {
+        int mid = left + (right - left) / 2;
+
+        mergeSort(arr, left, mid);
+        mergeSort(arr, mid + 1, right);
+
+        merge(arr, left, mid, right);
+    }
+}
+void merge_sort(int arr[], int n) {
+    mergeSort(arr, 0, n - 1);
+}
+//////////////////////////////////////////////////////////
+
+
+////////////////////ORDENAMIENTO RÁPIDO//////////////////////
+void swap(int* a, int* b) {
+    int temp = *a;
+    *a = *b;
+    *b = temp;
+}
+int Partition(int arr[], int inicio, int fin) {
+    int pivote = arr[fin]; 
+    int i = inicio - 1;
+    for (int j = inicio; j <= fin - 1; j++) {
+        if (arr[j] <= pivote) {
+            i++; 
+            swap(&arr[i], &arr[j]); 
+        }
+    }
+    swap(&arr[i + 1], &arr[fin]); 
+    return i + 1; 
+}
+void QuickSortHelper(int arr[], int inicio, int fin) {
+    if (inicio < fin) {
+        int pivote_idx = Partition(arr, inicio, fin);
+        QuickSortHelper(arr, inicio, pivote_idx - 1);
+        QuickSortHelper(arr, pivote_idx + 1, fin);
+    }
+}
+
+void quick_sort(int arr[], int n) {
+
+    QuickSortHelper(arr, 0, n - 1);
+}
+//////////////////////////////////////////////////////////
+
+////////////////////ORDEN POR MONTÍCULOS//////////////////
+void heapify(int arr[], int length, int i) {
+    int largest = i;
+    int left = 2 * i + 1;
+    int right = 2 * i + 2;
+
+    if (left < length && arr[left] > arr[largest]) {
+        largest = left;
+    }
+
+    if (right < length && arr[right] > arr[largest]) {
+        largest = right;
+    }
+
+    if (largest != i) {
+        swap(arr[i], arr[largest]);
+        heapify(arr, length, largest);
+    }
+}
+
+void heap_sort(int arr[], int n) {
+
+    for (int i = n / 2 - 1; i >= 0; i--) {
+        heapify(arr, n, i);
+    }
+
+    for (int i = n - 1; i > 0; i--) {
+        swap(arr[0], arr[i]);
+        heapify(arr, i, 0);
     }
 
 }
+//////////////////////////////////////////////////////////
+
+
+////////////////////ORDEN POR SHELL///////////////////////
+void shell_sort(int arr[], int n) {
+    for (int gap = n / 2; gap > 0; gap /= 2) {
+        for (int i = gap; i < n; i++) {
+            int temp = arr[i]; 
+            int j;
+            for (j = i; j >= gap && arr[j - gap] > temp; j -= gap) {
+                arr[j] = arr[j - gap];
+            }
+            arr[j] = temp;
+        }
+    }
+}
+//////////////////////////////////////////////////////////
