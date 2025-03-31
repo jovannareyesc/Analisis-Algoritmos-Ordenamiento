@@ -34,3 +34,23 @@ El programa lo que busca ejecutar por medio de esa cantidad finita de pasos prev
 Ahora, más explícitamente, lo que el programa hace es aleatoriamente generar un arreglo con una cantidad _n_ de valores los cuales se generan dentro del código por medio de un área, por así llamarle, de tamaño _n_ espacios con un contador el cual va dando pasos—o incrementos—de diez en diez empezando desde diez por automático.
 
 # Pasos para ejecutar el código
+Abajo, se adjuntan los pasos a seguir para ejecutar el código exitosamente desde una terminal de preferencia:
+1.
+   ```sh
+   git clone https://github.com/jovannareyesc/Analisis-Algoritmos-Ordenamiento
+   ```
+2. 
+   ```sh
+   cd Analisis-Algoritmos-Ordenamiento
+   ```
+3. 
+   ```sh
+   g++ main.cpp -o main -std=c++20
+   ```
+4. 
+   ```sh
+   ./main
+   ```
+# Conclusiones
+Finalmente, al conocer dichos conceptos y correr el programa para postumamente observar el comportamiento, efectividad y el nivel de optimidad que tiene cada algoritmo de ordenamiento para exitosamente ordenar datos u arreglos desordenados podemos concluir que los algoritmos que mejor cumplen dichas características en orden de mejor a peor se despliegan de tal forma:
+
