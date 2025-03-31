@@ -60,5 +60,7 @@ Finalmente, al conocer dichos conceptos y correr el programa para postumamente o
 5. Bubblesort
 6. Selectionsort
 7. Quicksort
+
+   
    Teóricamente, este orden debería estar invertido—o por lo menos, el primer y último lugar—, es decir, quicksort debería ser el algoritmo de ordenamiento más eficiente de los siete y el shellsort debería ser el menos eficiente. Sin embargo, por razones como lo es el sistema operativo de MacOS, los resultados se tornaron a dar algo completamente opuesto.
 ![grafica_ordenamientos](grafica_ordenamientos.png)
